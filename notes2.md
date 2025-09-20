@@ -41,15 +41,15 @@ Broadcast MAC:
 
 FULL FLOW: 
 
-Host A wants to send something to Host B 
+1) Host A wants to send something to Host B 
     - Example: A wants to `ping 10.0.0.1`
     - A only knows B's IP address (`10.0.0.1`)
     - To actually put it on the LAN, A has to wrap the request inside an Ethernet frame 
 
-Ethernet needs a destination MAC and can't just directly take in the IP: 
+2) Ethernet needs a destination MAC and can't just directly take in the IP: 
     - A has to know "What is the MAC address for IP 10.0.0.1" 
 
-To do this, A sends an ARP request with a broadcast MAC. 
+3) To do this, A sends an ARP request with a broadcast MAC. 
     - A doesn't know B's MAC so it uses ARP 
     - So it creates an ethernet frame: 
         `dstMac = ff:ff:ff:ff:ff:ff` (broadcast -> everyone on LAN hears it)
@@ -57,7 +57,7 @@ To do this, A sends an ARP request with a broadcast MAC.
         `ethertype = ARP` 
     - This makes a shout to the whole LAN asking who owns IP 10.0.0.
     
-B responds sends back an ARP to respond
+4) B responds sends back an ARP to respond
     - B builds a unicast frame back to A: 
         - dstMac = A's MAC 
         - srcMac = B's MAC
@@ -65,10 +65,10 @@ B responds sends back an ARP to respond
         - Payload = “IP 10.0.0.1 is at MAC 02:00:00:00:00:01.”
     - Only A accepts this response because it is directly addressed to A's MAC 
 
-A updates ARP cache 
+5) A updates ARP cache 
 
-Now A can send real data (IP packets wrapped in Ethernet): 
+6) Now A can send real data (IP packets wrapped in Ethernet): 
     - A builds an ethernet frame with the destination MAC set to B's MAC 
     - The payload inside this ethernet frame contains the actual data / IP packet 
-    - B then responds appropriatley
+    - B then responds appropriately
 
