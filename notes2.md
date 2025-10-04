@@ -15,7 +15,7 @@ The payload is what comes next (ARP, IPv4, IPv6)
 Currently, in order for us to send data / IP packet from Host A to Host B, these are the steps: 
 
 1) Host A wants to send an IP packet to B (10.0.0.1)
-2) Host A must wrap that IP packet inside an ethernet frame 
+2) Host A must wrap that IP packet isnside an eth frame 
 3) But an ethernet frame requires a destination MAC and can't process just the direct IP (10.0.0.1)
 4) A only knows B's IP not it's MAC. 
 5) This is where ARP comes in -- A asks 'Who has 10.0.0.1'and B responds with its MAC address. 
@@ -50,12 +50,12 @@ FULL FLOW:
     - A has to know "What is the MAC address for IP 10.0.0.1" 
 
 3) To do this, A sends an ARP request with a broadcast MAC. 
-    - A doesn't know B's MAC so it uses ARP 
+    - A doesn't know B's MAC so it uses ARP
     - So it creates an ethernet frame: 
         `dstMac = ff:ff:ff:ff:ff:ff` (broadcast -> everyone on LAN hears it)
         `srcMac = A's own MAC`
         `ethertype = ARP` 
-    - This makes a shout to the whole LAN asking who owns IP 10.0.0.
+    - This makes a shout to the whole LAn askin who owns IP 10.0.0.
     
 4) B responds sends back an ARP to respond
     - B builds a unicast frame back to A: 
@@ -68,7 +68,33 @@ FULL FLOW:
 5) A updates ARP cache 
 
 6) Now A can send real data (IP packets wrapped in Ethernet): 
-    - A builds an ethernet frame with the destination MAC set to B's MAC 
+    - A builds an ethernet frame with the destination MAC set to B's MAC  
     - The payload inside this ethernet frame contains the actual data / IP packet 
     - B then responds appropriately
+
+
+An ethernet frame has 2 main parts: 
+
+1) Header (14 bytes): 
+- Destination MAC: who it's for 
+- Source MAC: who sent it
+- Ethertype: whats inside (eg. ARP, IPv4)
+
+2) Payload (contents): 
+- Could be an ARP message, an IP packet, etc. 
+
+Right now, our TAP fd is giving us RAW ethernet frames so we need to: 
+1) Read them and peel off the header (14 bytes) 
+- 6 bytes: Destination MAC
+- 6 bytes: Source MAC 
+- 2 bytes: Ethertype 
+2) See what's inside (ARP, IPV4, etc.) 
+- If its `0x0806`, its ARP 
+- if its `0x0800`, its IPv4
+- If its `0x86dd`, its IPv6
+3) Act on it (reply to ARP)
+- For ARP requests, we need to parse the ARP payload 
+- If your request is asking for your IP, you construct an ARP reply and write() back to the fd 
+- This is how you tell your NIC who has 10.0.0.2 
+4) Handle Ipv4
 
