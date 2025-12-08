@@ -26,15 +26,7 @@ A minimal user-space implementation of core Internet networking protocols built 
 
 ## Architecture
 
-Application
-    ↓
-TCP / UDP
-    ↓
-IPv4
-    ↓
-ARP / Ethernet
-    ↓
-TUN/TAP → Linux Kernel → Network Interface
+Application -> TCP / UDP -> IPv4 -> ARP / Ethernet -> TUN/TAP → Linux Kernel → Network Interface
 
 Each protocol layer is implemented in its own Rust module.
 
@@ -74,9 +66,9 @@ src/
 
 Create and configure TAP device:
 
-```sudo ip tuntap add dev tap0 mode tap```
-```sudo ip link set tap0 up```
-```sudo ip addr add 10.0.0.1/24 dev tap0```
+1) ```sudo ip tuntap add dev tap0 mode tap```
+2) ```sudo ip link set tap0 up```
+3) ```sudo ip addr add 10.0.0.1/24 dev tap0```
 
 Run the stack:
 
@@ -84,5 +76,5 @@ Run the stack:
 
 You can test ARP, ICMP, and TCP traffic using:
 
-```ping 10.0.0.1```
-```tcpdump -i tap0```
+1) ```ping 10.0.0.1```
+2) ```tcpdump -i tap0```
