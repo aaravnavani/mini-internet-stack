@@ -5,49 +5,49 @@ A minimal user-space implementation of core Internet networking protocols built 
 ## Features
 
 - **Ethernet**
-\ \ - Frame parsing and construction
+    - Frame parsing and construction
 - **ARP (IPv4)**
-\ \ - ARP request parsing
-\ \ - ARP reply generation for local IP
+    - ARP request parsing
+    - ARP reply generation for local IP
 - **IPv4**
-\ \ - Header parsing and payload extraction
+    - Header parsing and payload extraction
 - **UDP**
-\ \ - Datagram parsing
+    - Datagram parsing
 - **TCP (Basic)**
-\ \ - TCP header parsing
-\ \ - SYN handshake handling
-\ \ - Sequence and acknowledgment tracking
-\ \ - Send/receive buffering
-\ \ - Basic retransmission logic
+    - TCP header parsing
+    - SYN handshake handling
+    - Sequence and acknowledgment tracking
+    - Send/receive buffering
+    - Basic retransmission logic
 - **Kernel Integration**
-\ \ - Real packet transmission and reception using Linux **TUN/TAP**
+    - Real packet transmission and reception using Linux **TUN/TAP**
 - **Debugging & Validation**
-\ \ - Packet inspection using `tcpdump` and `Wireshark`
+    - Packet inspection using `tcpdump` and `Wireshark`
 
 ## Architecture
 
 Application
-\ \ ↓
+    ↓
 TCP / UDP
-\ \ ↓
+    ↓
 IPv4
-\ \ ↓
+    ↓
 ARP / Ethernet
-\ \ ↓
+    ↓
 TUN/TAP → Linux Kernel → Network Interface
 
-Each protocol layer is implemented in its own Rust module for clean separation of concerns.
+Each protocol layer is implemented in its own Rust module.
 
 ## Project Structure
 
 src/
-\ \ main.rs # Packet loop and protocol dispatch
-\ \ tun.rs # TUN/TAP device setup and ioctl handling
-\ \ eth.rs # Ethernet frame parsing
-\ \ arp.rs # ARP parsing and reply generation
-\ \ ipv4.rs # IPv4 header parsing
-\ \ udp.rs # UDP datagram parsing
-\ \ tcp.rs # Basic TCP state machine and buffering
+    main.rs # Packet loop and protocol dispatch
+    tun.rs # TUN/TAP device setup and ioctl handling
+    eth.rs # Ethernet frame parsing
+    arp.rs # ARP parsing and reply generation
+    ipv4.rs # IPv4 header parsing
+    udp.rs # UDP datagram parsing
+    tcp.rs # Basic TCP state machine and buffering
 
 ## How It Works
 
@@ -55,8 +55,8 @@ src/
 2. Reads raw Ethernet frames from the kernel
 3. Parses protocol layers (Ethernet → ARP / IPv4 → UDP / TCP)
 4. Handles:
-\ \ - ARP requests for the local IP
-\ \ - TCP SYN packets and connection state
+    - ARP requests for the local IP
+    - TCP SYN packets and connection state
 5. Writes frames back to the TAP interface for real network transmission
 
 ## Requirements
@@ -74,15 +74,15 @@ src/
 
 Create and configure TAP device:
 
-sudo ip tuntap add dev tap0 mode tap
-sudo ip link set tap0 up
-sudo ip addr add 10.0.0.1/24 dev tap0
+```sudo ip tuntap add dev tap0 mode tap```
+```sudo ip link set tap0 up```
+```sudo ip addr add 10.0.0.1/24 dev tap0```
 
 Run the stack:
 
-sudo cargo run
+```sudo cargo run```
 
 You can test ARP, ICMP, and TCP traffic using:
 
-ping 10.0.0.1
-tcpdump -i tap0
+```ping 10.0.0.1```
+```tcpdump -i tap0```
