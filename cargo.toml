@@ -1,0 +1,3 @@
+[dependencies]
+nix = "0.27"
+libc = "0.2"

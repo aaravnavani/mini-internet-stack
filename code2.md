@@ -19,33 +19,45 @@ ARP: op=2, sha=MY_MAC, spa=MY_IP, tha=sha, tpa=spa
 6) Write the 42-byte reply to the TAP fd.
 
 
-So first we have the struct: 
+So first we have the struct:
 
 ```
 struct ArpV4 {
-    op:  u16,     // the operation: 1=request, 2=reply
-    sha: [u8;6],  // sender’s MAC
-    spa: [u8;4],  // sender’s IP
+    op:  u16,     // the opera: 1=request, 2=reply
+    sha: [u8;6],  // sender's MAC
+    spa: [u8;4],  // sender's IP
     tha: [u8;6],  // target MAC
-    tpa: [u8;4],  // target IP
+    tpa: [u8;4],  // target IP 
 }
 ```
 
-This is a Rust struct that matches the key fields of the ARP payload. 
+This is a Rust struct that matches the key fields payload. 
 
+Then, `parse_arp_v4()` takes the slice after the Ethernet header and 
 
+1) checks it's at least 28 bytes
+2) validates the header constraints: 
+Validates the header constants:
+htype==1 (Ethernet)
+ptype==0x0800 (IPv4)
+hlen==6 (MAC length)
+plen==4 (IPv4 length)
 
+So we want to read the remaining fields into the ArpV4 structureci:
 
+Reads the remaining fields into your ArpV4 str:
 
+op (request or reply)
+sha (sender's MAC)
+spa (sender's IP)
+tha (target MAC)
+tpa (target IP)
 
-
-
-
-It has a fixed structure so we create a struct: 
+It has a fixed sturcture  so we create a struct: 
 
 ```
-struct ArpV4 { op: u16, sha: [u8;6], spa: [u8;4], tha: [u8;6], tpa: [u8;4] }
+struct Arpv4 { op: u16, sha: [u8;6], spa: [u8;4], tha: [u8;6], tpa: [u8;4] }
 ```
 
-This is the struct that describes the format of the Arp.    
+This is the - that describes the format of the ARP. 
 

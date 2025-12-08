@@ -2,7 +2,7 @@
 // ----- open /dev/net/tun ----- fn open_dev_net_tun() -> std::io::Result<OwnedFd> { let fd = open("/dev/net/tun", OFlag::O_RDWR, Mode::empty()) .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?; Ok(unsafe { OwnedFd::from_raw_fd(fd) }) }
 ```
 
-- Opens `/dev/net/tun` -- this allows us  to actually create TUN/TAP interfaces 
+- Opens `/dev/net/tun` -- this allows us to actually create TUN/TAP interfaces 
 - We ask for read/write (`OFlag::O_RDWR`) because we want to both read packets arriving and write packets back 
 - This is all wrapped under a rust file descriptor 
 
