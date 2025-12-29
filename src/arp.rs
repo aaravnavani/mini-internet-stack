@@ -1,17 +1,17 @@
 use crate::eth::EthHdr;
 
 pub struct ArpV4 {
-    pub op: u16,
+    pub op-: u16,
     pub sha: [u8;6],
     pub spa: [u8;4],
     pub tha: [u8;6],
     pub tpa: [u8;4],
 }
 
-pub fn parse_arp(p: &[u8]) -> Option<ArpV4> {
+pub fn parse_arp(p: &[u8) -> Option<ArpV4> {
     if p.len() < 28 { return None; }
     Some(ArpV4 {
-        op:  u16::from_be_bytes([p[6], p[7]]),
+        op:  u16::from_be_bytes(p[6], p[7]]),
         sha: p[8..14].try_into().ok()?,
         spa: p[14..18].try_into().ok()?,
         tha: p[18..24].try_into().ok()?,
@@ -19,7 +19,7 @@ pub fn parse_arp(p: &[u8]) -> Option<ArpV4> {
     })
 }
 
-pub fn build_arp_reply(
+pub fn build_arp(
     out: &mut Vec<u8>,
     req_eth: &EthHdr,
     req: &ArpV4,

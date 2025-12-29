@@ -15,7 +15,6 @@ A minimal user-space implementation of core Internet networking protocols built 
     - Datagram parsing
 - **TCP (Basic)**
     - TCP header parsing
-    - SYN handshake handling
     - Sequence and acknowledgment tracking
     - Send/receive buffering
     - Basic retransmission logic
@@ -77,4 +76,4 @@ Run the stack:
 You can test ARP, ICMP, and TCP traffic using:
 
 1) ```ping 10.0.0.1```
-2) ```tcpdump -i tap0```
+2) ```tcpdump -i tap0```    

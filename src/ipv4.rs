@@ -6,7 +6,9 @@ pub struct Ipv4Hdr<'a> {
 }
 
 pub fn parse_ipv4(buf: &[u8]) -> Option<Ipv4Hdr> {
-    if buf.len() < 20 { return None; }
+    if buf.len() < 20 { 
+        return None; 
+    }
     let ihl = (buf[0] & 0x0F) as usize * 4;
 
     Some(Ipv4Hdr {
