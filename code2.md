@@ -1,4 +1,4 @@
-Right now, we have the Ethernet frames which is the outer envelope with MAC addresses. 
+Right now, with our TAP implementation, we have the Ethernet frames which is the outer envelope with MAC addresses. 
 
 Inside this envelope can be different payloads one of which is an ARP message. So our logic for this part of the code is something like: 
 

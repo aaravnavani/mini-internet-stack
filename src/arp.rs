@@ -1,5 +1,6 @@
 use crate::eth::EthHdr;
 
+// ARP is how machines find each other's MAC addresses 
 pub struct ArpV4 {
     pub op-: u16,
     pub sha: [u8;6],
@@ -34,7 +35,8 @@ pub fn build_arp(
 
     out.extend_from_slice(&1u16.to_be_bytes());
     out.extend_from_slice(&0x0800u16.to_be_bytes());
-    out.push(6); out.push(4);
+    out.push(6); 
+    out.push(4);
 
     out.extend_from_slice(&2u16.to_be_bytes());
     out.extend_from_slice(&my_mac);
@@ -42,3 +44,4 @@ pub fn build_arp(
     out.extend_from_slice(&req.sha);
     out.extend_from_slice(&req.spa);
 }
+ 

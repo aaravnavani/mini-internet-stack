@@ -58,7 +58,7 @@ struct Ifreq {
 }
 ```
 
-`ifr_name`: name of the interface we want (tap0)
+`ifr_naem`: name of the interface we want (tap0)
 `ifr_flags`: options/flags (TAP vs TUN, with/without metadata)
 `pad`: filler bytes
 
